@@ -54,7 +54,7 @@ module.exports = {
         const fechaFormateada = hoy.toLocaleDateString('es-ES', { day: 'numeric', month: 'long' });
 
         // 3. Unir cuerpo con barra de pie de página
-        const fullMessage = `${formattedText}\n\n│ ${groupMetadata.subject} ┊ ${fechaFormateada}`;
+        const fullMessage = `${formattedText}\n\n> ${groupMetadata.subject} ┊ ${fechaFormateada}`;
 
         // 4. Enviar con tarjeta contextual superior (WhatsApp Business / Verificado)
         return await sock.sendMessage(from, {
@@ -67,7 +67,7 @@ module.exports = {
                     mediaType: 1,
                     renderLargerThumbnail: false,
                     // Si tienes un link de canal/grupo o imagen opcional lo agregas aquí:
-                    //sourceUrl: "https://whatsapp.com"
+                    // sourceUrl: "https://whatsapp.com"
                 }
             }
         });

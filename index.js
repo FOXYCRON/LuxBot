@@ -5,10 +5,18 @@ const path = require('path');
 const pino = require('pino');
 
 const config = require('./config/settings');
+
+// --- RUTA A LA BASE DE DATOS DENTRO DE /database ---
 const DB_FILE = path.join(__dirname, 'database', 'comandos.json');
 
+// Crear la carpeta database si aún no existe
+const dbDir = path.dirname(DB_FILE);
+if (!fs.existsSync(dbDir)) {
+    fs.mkdirSync(dbDir, { recursive: true });
+}
+
 if (!fs.existsSync(DB_FILE)) {
-    fs.writeFileSync(DB_FILE, JSON.stringify({}));
+    fs.writeFileSync(DB_FILE, JSON.stringify({}), 'utf-8');
 }
 
 function getComandos() {
@@ -34,7 +42,7 @@ function loadCommands(dir) {
         const stat = fs.statSync(fullPath);
 
         if (stat.isDirectory()) {
-            // Si encuentra carpetas como 'admin' o 'clientes', las explora automáticamente
+            // Si encuentra subcarpetas (admin, clientes, etc.), explora su interior
             loadCommands(fullPath);
         } else if (item.endsWith('.js')) {
             const cmd = require(fullPath);
@@ -52,7 +60,7 @@ function loadCommands(dir) {
     }
 }
 
-// Ejecuta la lectura recursiva al arrancar
+// Ejecuta la lectura de carpetas al iniciar
 loadCommands(commandsPath);
 
 async function startBot() {
@@ -116,10 +124,22 @@ async function startBot() {
         const args = body.slice(config.prefix.length).trim().split(/ +/);
         const command = args.shift().toLowerCase();
 
-        // Parámetros pasados a los módulos de comandos
-        const context = { sock, from, command, args, body, m, sender, config, getComandos, saveComando };
+        // Parámetros pasados a los módulos de comandos (incluye systemCommands)
+        const context = { 
+            sock, 
+            from, 
+            command, 
+            args, 
+            body, 
+            m, 
+            sender, 
+            config, 
+            getComandos, 
+            saveComando, 
+            systemCommands 
+        };
 
-        // --- 2. DETECCIÓN Y BÚSQUEDA AUTOMÁTICA ---
+        // --- 2. DETECCIÓN Y BÚSQUEDA AUTOMÁTICA DE COMANDOS ---
         let targetCmd = systemCommands.get(command);
 
         // Si no es exacto, busca por prefijo pegado (ej. "setpago" -> encuentra comando "set")
@@ -132,12 +152,12 @@ async function startBot() {
             }
         }
 
-        // Si existe el módulo en cualquier subcarpeta de /commands, se ejecuta
+        // Si existe un módulo JS en /commands (admin o clientes), se ejecuta
         if (targetCmd) {
             return await targetCmd.execute(context);
         }
 
-        // 3. Si no es comando del sistema, busca en comandos.json
+        // 3. Si no es comando de sistema, busca en database/comandos.json
         const comandosBD = getComandos();
         if (comandosBD[command]) {
             return await sock.sendMessage(from, { text: comandosBD[command] });

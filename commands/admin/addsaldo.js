@@ -5,6 +5,7 @@ const checkAdminPermissions = require('../../utils/isBotAdmin');
 module.exports = {
     name: 'addsaldo',
     aliases: ['setsaldo', 'saldoadd'],
+    category: 'admin',
     execute: async ({ sock, from, args, body, m, sender, config }) => {
         const isGroup = from.endsWith('@g.us');
         const hasPermission = await checkAdminPermissions({ sock, from, sender, isGroup, m, config });

@@ -8,6 +8,7 @@ const SALDOS_FILE = path.join(__dirname, '..', '..', 'database', 'saldos.json');
 module.exports = {
     name: 'listsaldos',
     aliases: ['vsaldos', 'vsaldo', 'versaldos', 'listsaldo'],
+    category: 'admin',
     execute: async ({ sock, from, config, sender, m }) => {
         const isGroup = from.endsWith('@g.us');
         

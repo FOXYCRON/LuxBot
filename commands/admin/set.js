@@ -1,6 +1,7 @@
 module.exports = {
     name: 'set',
     aliases: [ ], // Para detectar prefijos pegados
+    category: 'admin',
     async execute({ sock, from, command, args, body, m, sender, config, saveComando }) {
         if (config.sudoNumbers.length > 0 && !config.sudoNumbers.includes(sender)) {
             return await sock.sendMessage(from, { text: '🚫 No tienes permiso para configurar comandos.' });

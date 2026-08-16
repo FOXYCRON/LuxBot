@@ -1,4 +1,7 @@
 module.exports = {
+    // Nombre del creador / dueño del bot
+    creator: 'LioTDH', // O tu nombre/apodo deseado
+
     // Prefijo para activar comandos ('/' o '.')
     prefix: '/',
 

@@ -5,6 +5,7 @@ const checkAdminPermissions = require('../../utils/isBotAdmin');
 module.exports = {
     name: 'saldo',
     aliases: ['balance', 'misaldo'],
+    category: 'admin',  // Temporal mente para admins
     execute: async ({ sock, from, args, m, sender, config }) => {
         const isGroup = from.endsWith('@g.us');
         

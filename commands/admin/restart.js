@@ -5,6 +5,7 @@ const checkAdminPermissions = require('../../utils/isBotAdmin');
 module.exports = {
     name: 'reload',
     aliases: ['recargar', 'refresh'],
+    category: 'admin',
     execute: async ({ sock, from, config, systemCommands, sender, m }) => {
         const isGroup = from.endsWith('@g.us');
         

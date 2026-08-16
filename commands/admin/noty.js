@@ -1,6 +1,7 @@
 module.exports = {
     name: 'notify',
     aliases: ['hidetag', 'n', 'todos', 'aviso'],
+    category: 'admin',
     async execute({ sock, from, command, args, body, m, sender, config }) {
         if (!from.endsWith('@g.us')) {
             return await sock.sendMessage(from, { text: '⚠️ Este comando solo se puede usar en grupos.' });

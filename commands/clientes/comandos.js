@@ -1,40 +1,43 @@
 module.exports = {
     name: 'comandos',
-    aliases: ['help', 'menu'],
-    async execute({ sock, from, config, getComandos, systemCommands }) {
-        // 1. Obtener los comandos guardados dinámicamente en el JSON
-        const comandosBD = getComandos();
-        const nombresJSON = Object.keys(comandosBD);
+    aliases: ['menu', 'help'],
+    execute: async ({ sock, from, config, getComandos, systemCommands, m }) => {
+        const listaComandos = new Set();
 
-        // 2. Filtrar comandos del sistema creados en archivo .js que sean públicos (omite alias duplicados)
-        // Puedes agregar a la lista de ignorados comandos admin como 'addsaldo', 'auth', 'set', etc.
-        const adminCommands = ['addsaldo', 'auth', 'unauth', 'set', 'edit', 'add', 'abrir', 'cerrar', 'notify', 'restart'];
-        
-        const nombresSistema = [];
-        if (systemCommands) {
-            for (const [key, cmd] of systemCommands.entries()) {
-                // Solo agrega el nombre principal (no los alias) y excluye los administrativos
-                if (cmd.name === key && !adminCommands.includes(cmd.name)) {
-                    nombresSistema.push(cmd.name);
-                }
+        // 1. Recorrer comandos de sistema (JS) y filtrar los de admin o invisibles
+        for (const [key, cmd] of systemCommands.entries()) {
+            // Ignorar alias duplicados en el Map y comandos de administración/sistema
+            if (cmd.name === key && cmd.category !== 'admin' && cmd.category !== 'system') {
+                listaComandos.add(`${config.prefix}${cmd.name}`);
             }
         }
 
-        // 3. Unir y ordenar todos los comandos disponibles para el cliente
-        const todosLosComandos = Array.from(new Set([...nombresSistema, ...nombresJSON])).sort();
+        // 2. Recorrer comandos creados en la base de datos (comandos.json)
+        const db = getComandos();
+        const clavesIgnoradas = ['bienvenida_enabled']; // Claves de configuración interna a omitir
 
-        if (todosLosComandos.length === 0) {
-            return await sock.sendMessage(from, { 
-                text: `📋 *LISTA DE COMANDOS*\n\nNo hay comandos disponibles en este momento.` 
-            });
+        for (const cmdKey of Object.keys(db)) {
+            if (!clavesIgnoradas.includes(cmdKey)) {
+                listaComandos.add(`${config.prefix}${cmdKey}`);
+            }
         }
 
-        let textoLista = `📋 *COMANDOS DISPONIBLES*\n\n`;
-        todosLosComandos.forEach((cmd) => {
-            textoLista += `• ${config.prefix}${cmd}\n`;
-        });
-        textoLista += `\n_Escribe cualquiera de los comandos anteriores para ver su contenido._`;
+        // Ordenar alfabéticamente
+        const comandosOrdenados = Array.from(listaComandos).sort();
 
-        return await sock.sendMessage(from, { text: textoLista });
+        if (comandosOrdenados.length === 0) {
+            return await sock.sendMessage(from, { 
+                text: '📋 No hay comandos disponibles por el momento.' 
+            }, { quoted: m });
+        }
+
+        const textoMenu = 
+`📋 *COMANDOS DISPONIBLES*
+
+${comandosOrdenados.map(c => `• ${c}`).join('\n')}
+
+_Escribe cualquiera de los comandos anteriores para ver su contenido._`;
+
+        await sock.sendMessage(from, { text: textoMenu }, { quoted: m });
     }
 };

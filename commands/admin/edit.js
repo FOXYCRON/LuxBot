@@ -1,6 +1,7 @@
 module.exports = {
     name: 'edit',
     aliases: ['editar'],
+    category: 'admin',
     async execute({ sock, from, command, args, body, sender, config, getComandos, saveComando }) {
         if (config.sudoNumbers.length > 0 && !config.sudoNumbers.includes(sender)) {
             return await sock.sendMessage(from, { text: '🚫 No tienes permiso para editar comandos.' });

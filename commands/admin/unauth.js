@@ -5,6 +5,7 @@ const parseTargetUser = require('../../utils/getUser');
 module.exports = {
     name: 'unauth',
     aliases: ['revoke', 'quitaracceso', 'removeauth'],
+    category: 'admin',
     execute: async ({ sock, from, args, m, sender, config }) => {
         const isGroup = from.endsWith('@g.us');
         

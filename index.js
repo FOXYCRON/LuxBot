@@ -153,6 +153,11 @@ async function startBot() {
 
         const { id, participants, action } = update;
 
+        // 🛑 VALIDACIÓN DE GRUPOS PERMITIDOS
+        if (config.allowedGroups.length > 0 && !config.allowedGroups.includes(id)) {
+            return;
+        }
+
         if (action === 'add') {
             try {
                 // Leer el estado directamente de welcome.json
@@ -202,10 +207,10 @@ async function startBot() {
 ───────────────
 
 📌 *COMANDOS ÚTILES:*
-• *${config.prefix}stock* ➔ Ver precios y disponibilidad
-• *${config.prefix}pago* ➔ Métodos de pago disponibles
-• *${config.prefix}combos* ➔ Mira los combos disponibles
-• *${config.prefix}lotes* ➔ Precios especiales en compras por lote
+  *${config.prefix}stock* ➔ Ver precios y disponibilidad
+  *${config.prefix}pago* ➔ Métodos de pago disponibles
+  *${config.prefix}combos* ➔ Mira los combos disponibles
+  *${config.prefix}lotes* ➔ Precios especiales en compras por lote
 
 💎 ¡Disfruta del mejor entretenimiento con la calidad y confianza de LUXPASS!`;
 

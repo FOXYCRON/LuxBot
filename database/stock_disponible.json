@@ -1,0 +1,54 @@
+{
+  "vix": {
+    "perfil": {
+      "12m": {
+        "precio": 55,
+        "cuentas": [
+          "juanpicon51+gwgw345@gmail.com:itzelcas312:R1"
+        ]
+      }
+    }
+  },
+  "paramount": {
+    "perfil": {
+      "12m": {
+        "precio": 85,
+        "cuentas": [
+          "hkuzbog275@tunthuta.com:Rachel632348:Z5"
+        ]
+      }
+    }
+  },
+  "filmora": {
+    "perfil": {
+      "lifetime": {
+        "precio": 35,
+        "cuentas": [
+          "pnicozisis@gmail.com:Mybyblos1!!"
+        ]
+      }
+    }
+  },
+  "prime": {
+    "perfil": {
+      "1m": {
+        "precio": 35,
+        "cuentas": []
+      }
+    },
+    "completa": {
+      "1m": {
+        "precio": 30,
+        "cuentas": []
+      }
+    }
+  },
+  "disney": {
+    "perfil": {
+      "1m": {
+        "precio": 45,
+        "cuentas": []
+      }
+    }
+  }
+}

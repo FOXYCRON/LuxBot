@@ -26,24 +26,35 @@ module.exports = {
             const groupName = groupMetadata.subject;
             const groupDesc = groupMetadata.desc ? groupMetadata.desc.toString() : 'Sin descripción por el momento.';
 
-            // Quien ejecuta el comando sirve de usuario de prueba
-            const userNumber = sender.split('@')[0];
+            // Mención formateada para el usuario de prueba
+            const usuariosMencionados = `@${sender.split('@')[0]}`;
 
             const mensajeBienvenida = 
-                `👋 *¡BIENVENIDO/A A LUXPASS!* @${userNumber}
+`✨ *¡BIENVENIDO/A A LUXPASS!* ${usuariosMencionados}
 
-                👥 *Grupo:* ${groupName}
+👥 *Grupo:* ${groupName}
 
-                🍿 *DISPONIBLE EN LUXPASS:*
-                🎦 *Streaming:* Netflix, Disney+, Max, Prime, VIX, Crunchyroll, Apple TV+, Canva Pro y más.
-                🎶 *Música:* Spotify Premium, YouTube Premium, Apple Music, Deezer.
-                📺 *TV & Servicios:* IPTV, Películas, Series y Recargas de saldo.
+───────────────
+💼 *CATÁLOGO DE SERVICIOS*
 
-                📦 *¿DÓNDE VER EL STOCK Y PRECIOS?*
-                • Escribe *${config.prefix}stock* para consultar la lista en tiempo real.
-                • Escribe *${config.prefix}comandos* para ver todas las funciones disponibles.
+🎬 *Streaming:* 
+• Netflix | Disney+ | Max | Prime | VIX+
+• Crunchyroll | Apple TV+ | Canva Pro
 
-                _¡Gracias por unirte! Revisa el catálogo escribiendo los comandos arriba._`;
+🎵 *Música:* 
+• Spotify | YouTube Premium | Apple Music | Deezer
+
+📺 *TV & Multimedia:* 
+• IPTV | Películas | Series
+───────────────
+
+📌 *COMANDOS ÚTILES:*
+  *${config.prefix}stock* ➔ Ver precios y disponibilidad
+  *${config.prefix}pago* ➔ Métodos de pago disponibles
+  *${config.prefix}combos* ➔ Mira los combos disponibles
+  *${config.prefix}lotes* ➔ Precios especiales en compras por lote
+
+💎 ¡Disfruta del mejor entretenimiento con la calidad y confianza de LUXPASS!`;
 
             await sock.sendMessage(from, {
                 text: mensajeBienvenida,
@@ -52,7 +63,7 @@ module.exports = {
 
         } catch (error) {
             console.error('Error al probar bienvenida:', error);
-            await sock.sendMessage(from, { text: '❌ Ocurrió un error al intentar generar la bienvenida.' });
+            await sock.sendMessage(from, { text: '❌ Ocurrió un error al intentar generar la bienvenida.' }, { quoted: m });
         }
     }
 };
